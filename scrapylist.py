@@ -1,7 +1,10 @@
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
+import csv
 
-for page in range(1,2):
+csvFile=open('list.csv','w+',newline='',encoding='utf-8')
+csvWriter=csv.writer(csvFile)
+for page in range(1,296):
     url="https://list.jd.com/list.html?cat=1713,3267&page="+str(page)+"&stock=0"
     html=urlopen(url)
     bsObj=BeautifulSoup(html,"html.parser")
@@ -18,4 +21,5 @@ for page in range(1,2):
         publish=book.find("span",{"class":"p-bi-store"}).get_text().replace('\n','').replace(' ','')
         pub_time=book.find("span",{"class":"p-bi-date"}).get_text().replace('\n','').replace(' ','')
         line=[name,author,publish,pub_time,link]
-        print(line)
+        csvWriter.writerow(line)
+csvFile.close()
